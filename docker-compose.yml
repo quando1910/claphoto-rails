@@ -23,8 +23,8 @@ services:
       dockerfile: Dockerfile
     environment:
       - APP_DIR=/vue-frontend
-    command: npm run dev
-    # command: npm run prod
+    # command: npm run dev
+    command: npm run prod
     container_name: vue-frontend
     image: vue-client
     volumes:
@@ -56,8 +56,6 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    volumes:
-      - ./client/dist:/usr/share/nginx/html
     depends_on:
       - rails
       - vuejs
