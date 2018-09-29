@@ -1,5 +1,5 @@
 ActiveAdmin.register Price do
-  permit_params :num_pp, :price, ,:offer ,:types ,:priceFirst ,:aspect ,:takenTime
+  permit_params :num_pp, :price, :offer ,:types ,:priceFirst ,:aspect ,:takenTime
 
   index do
     selectable_column
