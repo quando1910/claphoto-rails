@@ -64,10 +64,6 @@ export default {
     this.url = window.location.href
   },
   mounted() {
-    if ( this.article.images.length > 0 ) {
-      $('meta[property=og\\:image]').attr('content', this.$options.filters.takeIsmage(this.article.images[0].name.url))
-      $('meta[property=og\\:title]').attr('content', `${this.article.title}`)
-    }
     if ($('.cp-post-slider').length) {
       $('.cp-post-slider').bxSlider({
         infiniteLoop: true,

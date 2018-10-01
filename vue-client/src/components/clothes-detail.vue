@@ -125,8 +125,6 @@ export default {
       this.result = true
       if (this.cloth.images.length > 0 ) {
         this.mainImg = this.cloth.images[0].name.url
-        $('meta[property=og\\:image]').attr('content', this.$options.filters.takeImage(this.mainImg))
-        $('meta[property=og\\:title]').attr('content', `Thông tin về trang phục ${this.cloth.title}`)
       }
       if (this.cloth.images.length > 1 ) {
         let listImg = this.cloth.images.slice(1)
