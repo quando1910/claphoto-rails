@@ -7,8 +7,8 @@
           <img class="noti-img" :src="noti.image">
         </div>
         <div class="col-md-7 noti-meta">
-          <h2 class="noti-title">{{noti.title}}</h2>
-          <p class="noti-desc">{{noti.description}}</p>
+          <h6 class="noti-title">{{noti.title}}</h6>
+          <p class="noti-desc">{{noti.description}}</p><br>
           <a>Click để xem</a>
         </div>
       </div>

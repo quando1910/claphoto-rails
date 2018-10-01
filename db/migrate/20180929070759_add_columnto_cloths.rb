@@ -1,5 +1,5 @@
 class AddColumntoCloths < ActiveRecord::Migration[5.1]
   def change
-    add_column :cloths, :description, :string
+    add_column :cloths, :description, :text
   end
 end

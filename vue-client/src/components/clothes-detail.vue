@@ -3,14 +3,12 @@
     <div id="cp-content-wrap" style="margin-top: -80px;" class="cp-content-wrap">
       <div class="container">
         <div class="row">
-          <div class="col-md-7">
+          <div class="col-md-7" v-if="cloth.images.length > 0">
             <div class="box-detail-img">
-              <img class="large-img" src="https://media.wired.com/photos/598e35fb99d76447c4eb1f28/master/pass/phonepicutres-TA.jpg">
+              <img class="large-img" :src="mainImg |takeImage">
             </div>
-            <div class="img-meta">
-              <img class="small-img" src="https://image.freepik.com/free-photo/cute-cat-picture_1122-449.jpg">
-              <img class="small-img" src="https://cdn.newsapi.com.au/image/v1/9fdbf585d17c95f7a31ccacdb6466af9">
-              <img class="small-img" src="https://cdn.newsapi.com.au/image/v1/9fdbf585d17c95f7a31ccacdb6466af9">
+            <div class="img-meta" v-if="cloth.images.length > 1">
+              <img class="small-img"  @click="changeImg(item, index)" v-for="(item, index) of listImg" :key="index" :src="item | takeImage">
             </div>
           </div>
           <div class="col-md-5">
@@ -103,13 +101,14 @@
 <script>
 import {mapGetters, mapActions} from 'vuex'
 import * as types from '../store/types'
-
 export default {
   name: 'ClothesDetails',
   data() {
     return {
       cloths: null,
       related_clothes: null,
+      mainImg: null,
+      listImg: [],
       cloth: null,
       sup: null,
       url : null,
@@ -124,6 +123,14 @@ export default {
       this.cloth = this.cloths.splice(this.cloths.findIndex(x => x.id == this.$route.params.id),1)[0]
       this.sup = this.cloths.filter(x => x.id != this.$route.params.id)
       this.result = true
+      if (this.cloth.images.length > 0 ) {
+        this.mainImg = this.cloth.images[0].name.url
+        $('meta[property=og\\:image]').attr('content', this.$options.filters.takeIsmage(this.mainImg))
+      }
+      if (this.cloth.images.length > 1 ) {
+        let listImg = this.cloth.images.slice(1)
+        this.listImg = listImg.map(x => x.name.url)
+      }
     })
   },
   mounted () {
@@ -138,7 +145,12 @@ export default {
     ...mapActions({
       booking: 'booking',
       deleteBooking: 'deleteBooking'
-    })
+    }),
+    changeImg(item, index) {
+      this.listImg.splice(index,index + 1)
+      this.listImg.push(this.mainImg)
+      this.mainImg = item
+    }
   }
 }
 </script>
@@ -154,6 +166,8 @@ export default {
 }
 .box-detail-img {
   width: 100%;
+  height: 435px;
+  object-fit: contain;
 }
 .money {
   color: rgb(233, 30, 95);
@@ -167,6 +181,7 @@ export default {
   width: 100px;
   height: 100px;
   object-fit: cover;
+  transform: translateY(-20%);
 }
 .img-meta {
   overflow-x: scroll;

@@ -26,7 +26,7 @@ ActiveAdmin.register Cloth do
       f.input :link
       f.input :quantity
       f.input :funds
-      f.input :description
+      f.input :description, :input_html => { :rows => 5, :maxlength => 1000  }
       f.input :parent_id
       f.has_many :images do |image|
         image.inputs 'Image', :multipart => true do 
