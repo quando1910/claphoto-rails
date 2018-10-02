@@ -7,7 +7,7 @@
             <li class="col-md-4" v-for="(item,index) of stories" :key="index">
               <router-link :to="{name: 'StoryDetail', params:{id: item.id}}" tag="a">
                 <figure> 
-                  <progressive-img class="product-photo" style="border:none;overflow:hidden" alt="img02" :src="item.cover.url | takeImage"/>
+                  <progressive-img class="product-photo" alt="img02" :src="item.cover.url | takeImage"/>
                 </figure>
                 <div class="cp-gallery-content">
                   <h3>{{item.title}}</h3>
@@ -38,7 +38,6 @@ export default {
   created () {
     this.$http.get(types.STORIES).then(res => {
       this.stories = res.body
-      console.log( this.stories )
     })
   },
   updated() {
