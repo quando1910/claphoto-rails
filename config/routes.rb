@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+
+  post '/admin/photos' => 'photos#create', :as => :photo_create
+  post '/admin/stories' => 'stories#create', :as => :story_create
+
   ActiveAdmin.routes(self)
   devise_for :admin_users, ActiveAdmin::Devise.config
   
