@@ -102,13 +102,13 @@ const router = new Router({
       path: '/article/:id',
       component: Detail,
       name: 'Detail',
-      alias: ['/costume/:id', '/concept/:id', '/posing/:id', '/offer/:id', '/ask/:id']
+      alias: ['/costume/:id', '/notice/:id', '/concept/:id', '/posing/:id', '/offer/:id', '/ask/:id']
     },
     {
       path: '/concept',
       component: Concept,
       name: 'Concept',
-      alias: ['/posing', '/offer', '/ask']
+      alias: ['/posing', '/offer', '/ask', '/notice']
     },
     {
       path: '/about',

@@ -36,6 +36,8 @@ export default {
       this.kind = 3
     } else if (this.$route.path == '/offer') {
       this.kind = 4
+    } else if (this.$route.path == '/notice') {
+      this.kind = 5
     }
     this.$http.get(types.LIST_ARTICLE, {params: {kind: this.kind}}).then(res => {
       this.articles = res.body
