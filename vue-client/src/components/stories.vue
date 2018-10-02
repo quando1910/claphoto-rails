@@ -3,6 +3,12 @@
     <div id="cp-content-wrap" class="cp-content-wrap">
       <div class="container">
         <div class="row">
+          <div class="cp-heading-holder col-md-3 col-sm-6">
+            <div class="align-center">
+              <h3 class="title-price">Câu chuyện của lớp</h3>
+              <p>Mỗi bộ hình kỉ yếu là một câu chuyện riêng</p>
+            </div>
+          </div>
           <ul class="cp-extended-gallery gallery">
             <li class="col-md-4" v-for="(item,index) of stories" :key="index">
               <router-link :to="{name: 'StoryDetail', params:{id: item.id}}" tag="a">
