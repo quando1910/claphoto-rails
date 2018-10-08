@@ -1,6 +1,6 @@
 <template>
   <div class="stories" v-if="stories">
-    <div id="cp-content-wrap" class="cp-content-wrap">
+    <div id="cp-content-wrap" class="cp-content-wrap" style="padding-top: 0">
       <div class="container">
         <div class="row">
           <div class="cp-heading-holder col-md-3 col-sm-6">
