@@ -34,6 +34,20 @@ services:
       - "8080:8080" # specify port forewarding
     restart: always
     
+  media: # name of the first service
+    build:
+      context: gaomedia-claphoto
+      dockerfile: Dockerfile
+    command: npm start
+    container_name: gaomedia
+    image: gaomedia
+    volumes:
+      - ./gaomedia-claphoto:/gaomedia/:rw
+      - /gaomedia/node_modules
+    ports:
+      - "8000:8000" # specify port forewarding
+    restart: always
+
   rails: #name of the second service
     build: . # specify the directory of the Dockerfile
     command: rails s -e production -p 3000 -b '0.0.0.0' 
@@ -59,6 +73,7 @@ services:
     depends_on:
       - rails
       - vuejs
+      - media
 volumes:
   db_data:
   web_rubygems:
