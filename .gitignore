@@ -24,6 +24,9 @@ config/environments/*.local.yml
 
 vue-client/node_modules/
 vue-client/dist/
+media/node_modules/
+media/dist/
+
 vue-client/npm-debug.log*
 vue-client/yarn-debug.log*
 vue-client/yarn-error.log*
