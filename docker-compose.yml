@@ -36,13 +36,13 @@ services:
     
   media: # name of the first service
     build:
-      context: gaomedia-claphoto
+      context: media
       dockerfile: Dockerfile
     command: npm start
     container_name: gaomedia
     image: gaomedia
     volumes:
-      - ./gaomedia-claphoto:/gaomedia/:rw
+      - ./media:/gaomedia/:rw
       - /gaomedia/node_modules
     ports:
       - "8000:8000" # specify port forewarding
