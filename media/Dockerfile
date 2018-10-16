@@ -1,8 +1,7 @@
 # Tùy vào dự án của bạn sẽ thay đổi Ruby version của mình
-FROM ruby:2.5.0
+FROM mhart/alpine-node:8.0.0
 
 # Install các package cần thiết
-RUN apt-get install gulp
 
 WORKDIR /gaomedia
 
