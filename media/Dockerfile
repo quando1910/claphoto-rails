@@ -1,5 +1,5 @@
 # Tùy vào dự án của bạn sẽ thay đổi Ruby version của mình
-FROM mhart/alpine-node:8.0.0
+FROM ruby:2.5.0
 
 # Install các package cần thiết
 RUN apt-get install gulp
