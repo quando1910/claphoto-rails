@@ -39,7 +39,7 @@ class GoogleController < ApplicationController
       auth_client.update!(
         :additional_parameters => {"access_type" => "offline"},
         :scope => 'https://www.googleapis.com/auth/drive.metadata.readonly',
-        :redirect_uri => 'http://manage.theclassic.studio/oauth2callback')
+        :redirect_uri => 'http://theclassic.studio:3000/oauth2callback')
       if request['code'] == nil
         auth_uri = auth_client.authorization_uri.to_s
         redirect_to(auth_uri)
