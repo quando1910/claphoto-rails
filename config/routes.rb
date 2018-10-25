@@ -49,7 +49,7 @@ Rails.application.routes.draw do
   post '/raws/:id/submit' => 'raws#submit', :as => 'submit_raws'
   post "/upload_image" => "upload#upload_image", :as => :upload_image
   get "/download_file/:name" => "upload#access_file", :as => :access_file, :name => /.*/
-  get "oauth2callback" => 'google#oauth', :as => :google_photos
+  get 'oauth2callback' => 'google#oauth', :as => :google_photos
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

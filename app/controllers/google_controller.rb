@@ -3,6 +3,7 @@ class GoogleController < ApplicationController
   require 'google/api_client/client_secrets'
   require "net/http"
   require "uri"
+
   before_action :authorize_drive, only: [:oauth]
 
   def create 
@@ -33,22 +34,30 @@ class GoogleController < ApplicationController
   end
 
   def authorize_drive
-    if !session[:credentials]
-      client_secrets = Google::APIClient::ClientSecrets.load("#{Rails.root}/config/client_secrets.json")
-      auth_client = client_secrets.to_authorization
+    uri   = URI.parse(request.fullpath)
+    @id = ''
+    if uri.query
+      params = CGI.parse(uri.query)
+      @id  = params['id'].first
+    end
+    if @id 
+      session[:id] = @id
+    end
+    client_secrets = Google::APIClient::ClientSecrets.load("#{Rails.root}/config/client_secrets.json")
+    auth_client = client_secrets.to_authorization
+    if request['code'] == nil
       auth_client.update!(
         :additional_parameters => {"access_type" => "offline"},
+        :state =>  @id,
         :scope => 'https://www.googleapis.com/auth/drive.metadata.readonly',
-        :redirect_uri => 'http://theclassic.studio:3000/oauth2callback')
-      if request['code'] == nil
-        auth_uri = auth_client.authorization_uri.to_s
-        redirect_to(auth_uri)
-      else
-        auth_client.code = request['code']
-        auth_client.fetch_access_token!
-        auth_client.client_secret = nil
-        session[:credentials] = auth_client.to_json
-      end
+        :redirect_uri => "http://theclassic.studio:3000/oauth2callback" )
+      auth_uri = auth_client.authorization_uri.to_s
+      redirect_to(auth_uri)
+    else
+      auth_client.code = request['code']
+      auth_client.fetch_access_token!
+      auth_client.client_secret = nil
+      session[:credentials] = auth_client.to_json
     end
   end
 
@@ -62,7 +71,7 @@ class GoogleController < ApplicationController
     drive = Google::Apis::DriveV2::DriveService.new
     # encode
     img_arr = []
-    @viewers = Contract.find(params[:id]).viewers.where(typeFile: 1)
+    @viewers = Contract.find(session[:id]).viewers.where(typeFile: 1)
     #each items
     @viewers.each do |v|
       drive_id = v.drive_link.split(',')
@@ -82,7 +91,7 @@ class GoogleController < ApplicationController
       end
     end
     if Picture.create(img_arr)
-      render status: 200
+      redirect_to admin_contract_path(session[:id])
     else 
       render status: 400
     end

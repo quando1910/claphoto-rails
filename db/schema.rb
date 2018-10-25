@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 20180929070759) do
 
-  create_table "accessories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "accessories", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
     t.string "price"
     t.datetime "created_at", null: false
@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20180929070759) do
     t.string "link"
   end
 
-  create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "active_admin_comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "namespace"
     t.text "body"
     t.string "resource_type"
@@ -34,13 +34,13 @@ ActiveRecord::Schema.define(version: 20180929070759) do
     t.index ["resource_type", "resource_id"], name: "index_active_admin_comments_on_resource_type_and_resource_id"
   end
 
-  create_table "admin_secrets", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "admin_secrets", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "token_secret"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "admin_users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "admin_users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -55,9 +55,9 @@ ActiveRecord::Schema.define(version: 20180929070759) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "articles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
-    t.text "content", limit: 16777215
-    t.text "description", limit: 16777215
+  create_table "articles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.text "content"
+    t.text "description"
     t.integer "kind", default: 0
     t.string "title"
     t.string "key"
@@ -67,7 +67,7 @@ ActiveRecord::Schema.define(version: 20180929070759) do
     t.integer "favorite"
   end
 
-  create_table "carts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "carts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "accessory_id"
     t.bigint "contract_id"
     t.integer "quantity"
@@ -79,7 +79,7 @@ ActiveRecord::Schema.define(version: 20180929070759) do
     t.index ["contract_id"], name: "index_carts_on_contract_id"
   end
 
-  create_table "cloths", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "cloths", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
     t.string "hire"
     t.string "lost"
@@ -106,7 +106,7 @@ ActiveRecord::Schema.define(version: 20180929070759) do
     t.index ["photographer_id"], name: "index_contract_photographers_on_photographer_id"
   end
 
-  create_table "contract_plans", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "contract_plans", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "quater"
     t.string "costume"
     t.string "place"
@@ -117,7 +117,7 @@ ActiveRecord::Schema.define(version: 20180929070759) do
     t.index ["contract_id"], name: "index_contract_plans_on_contract_id"
   end
 
-  create_table "contracts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "contracts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
     t.string "phone"
     t.string "school"
@@ -147,7 +147,7 @@ ActiveRecord::Schema.define(version: 20180929070759) do
     t.index ["price_id"], name: "index_contracts_on_price_id"
   end
 
-  create_table "images", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "images", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
     t.bigint "article_id"
     t.datetime "created_at", null: false
@@ -157,7 +157,7 @@ ActiveRecord::Schema.define(version: 20180929070759) do
     t.index ["cloth_id"], name: "index_images_on_cloth_id"
   end
 
-  create_table "information", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "information", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "phone"
     t.string "address"
     t.string "name"
@@ -167,7 +167,7 @@ ActiveRecord::Schema.define(version: 20180929070759) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "email"
     t.string "name"
     t.string "message"
@@ -185,7 +185,7 @@ ActiveRecord::Schema.define(version: 20180929070759) do
     t.index ["article_id"], name: "index_notifications_on_article_id"
   end
 
-  create_table "packages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "packages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
     t.float "price", limit: 24
     t.string "key"
@@ -193,7 +193,7 @@ ActiveRecord::Schema.define(version: 20180929070759) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "photographers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "photographers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "avatar"
     t.string "name"
     t.datetime "date_join"
@@ -206,7 +206,7 @@ ActiveRecord::Schema.define(version: 20180929070759) do
     t.boolean "favorite"
   end
 
-  create_table "photos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "photos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "photo"
     t.integer "kind", default: 0
     t.datetime "created_at", null: false
@@ -216,7 +216,7 @@ ActiveRecord::Schema.define(version: 20180929070759) do
     t.index ["story_id"], name: "index_photos_on_story_id"
   end
 
-  create_table "pictures", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "pictures", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.text "pictureId"
     t.text "name"
     t.string "mimeType"
@@ -227,7 +227,7 @@ ActiveRecord::Schema.define(version: 20180929070759) do
     t.index ["viewer_id"], name: "index_pictures_on_viewer_id"
   end
 
-  create_table "plus", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci" do |t|
+  create_table "plus", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "content"
     t.integer "quantity"
     t.float "price", limit: 24
@@ -238,10 +238,14 @@ ActiveRecord::Schema.define(version: 20180929070759) do
     t.index ["contract_id"], name: "index_plus_on_contract_id"
   end
 
-  create_table "prices", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "prices", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "num_pp"
     t.float "price", limit: 24
-    t.integer "num_pg"
+    t.float "priceFirst", limit: 24
+    t.text "offer"
+    t.integer "types"
+    t.integer "aspect"
+    t.string "takenTime"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -254,7 +258,7 @@ ActiveRecord::Schema.define(version: 20180929070759) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "videos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "videos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "video"
     t.integer "kind", default: 0
     t.datetime "created_at", null: false
@@ -263,7 +267,7 @@ ActiveRecord::Schema.define(version: 20180929070759) do
     t.text "desc"
   end
 
-  create_table "viewers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+  create_table "viewers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "email"
     t.string "pwd"
     t.string "drive_link"
