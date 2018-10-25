@@ -48,7 +48,7 @@ class GoogleController < ApplicationController
     if request['code'] == nil
       auth_client.update!(
         :additional_parameters => {
-          "access_type" => "offline"
+          "access_type" => "offline",
           "include_granted_scopes" => "true"
         },
         :state =>  @id,
