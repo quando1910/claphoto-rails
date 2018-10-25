@@ -47,7 +47,10 @@ class GoogleController < ApplicationController
     auth_client = client_secrets.to_authorization
     if request['code'] == nil
       auth_client.update!(
-        :additional_parameters => {"access_type" => "offline"},
+        :additional_parameters => {
+          "access_type" => "offline"
+          "include_granted_scopes" => "true"
+        },
         :state =>  @id,
         :scope => 'https://www.googleapis.com/auth/drive.metadata.readonly',
         # :redirect_uri => "http://localhost:3000/oauth2callback" )
