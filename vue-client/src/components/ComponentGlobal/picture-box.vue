@@ -18,23 +18,26 @@ export default {
   },
   methods: {
     toDataURL(url, callback) {
-      var xhr = new XMLHttpRequest();
-      xhr.onload = function() {
-        var reader = new FileReader();
-        reader.onloadend = function() {
-          callback(reader.result);
-        }
-        reader.readAsDataURL(xhr.response);
-      };
-      xhr.open('GET', url);
-      xhr.responseType = 'blob';
-      xhr.send();
+      // var xhr = new XMLHttpRequest();
+      // xhr.onload = function() {
+      //   var reader = new FileReader();
+      //   reader.onloadend = function() {
+      //     callback(reader.result);
+      //   }
+      //   reader.readAsDataURL(xhr.response);
+      // };
+      // xhr.open('GET', url);
+      // xhr.responseType = 'blob';
+      // xhr.send();
+      var restRequest = gapi.client.request({
+        'path': url
+      });
+      console.log(restRequest)
     },
     downloaded () {
       let urlImg = this.$options.filters.mediumGoogleImage(this.dataPic)
-      console.log(urlImg)
-      this.toDataURL('https://doc-0s-6o-docs.googleusercontent.com/docs/securesc/32ucp6blnn56pdct1gp3dg7avqh3d5lk/s7fm39ql239a927ud5b7jkqj3mff9t4t/1541556000000/09686435642626771864/13247814753082231894/1_h6liVKjfkGgXQ1kXLy_AmwZSGdJlMri?e=view', function(dataUrl) {
-        console.log('RESULT:', dataUrl)
+      this.$http.get(urlImg).then(res => {
+        console.log(res.body)
       })
     },
     closeBox () {
