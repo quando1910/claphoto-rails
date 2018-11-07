@@ -32,7 +32,11 @@ Vue.http.options.root = process.env.SERVER_IP
 
 // set header for all request
 Vue.http.headers.common['Access-Control-Allow-Origin'] = '*'
-Vue.http.headers.common['content-type'] = 'application/json'
+Vue.http.headers.common['Access-Control-Allow-Methods'] = 'POST, GET, PUT, OPTIONS, DELETE'
+Vue.http.headers.common['Access-Control-Allow-Headers'] = 'Access-Control-Allow-Methods, Access-Control-Allow-Origin, Origin, Accept, Content-Type'
+Vue.http.headers.common['X-My-Custom-Header'] = 'Header-Value'
+Vue.http.headers.common['Content-Type'] = 'application/json'
+Vue.http.headers.common['Accept'] = 'application/json'
 Vue.http.headers.common['Access-Token'] = localStorage.getItem('ACCESS_TOKEN')
 Vue.http.headers.common['Uid'] = localStorage.getItem('UID')
 Vue.http.headers.common['Provider'] = localStorage.getItem('PROVIDER')

@@ -23,7 +23,7 @@ Vue.filter('mediumGoogleImage', function (value) {
 })
 
 Vue.filter('fullGoogleImage', function (value) {
-  return `https://drive.google.com/uc?export=view&id=${value}`
+  return `https://drive.google.com/uc?export=download&id=${value}`
 })
 
 Vue.filter('moment', function (date) {

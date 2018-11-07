@@ -3,7 +3,7 @@
     <div id="picturebox" class="picture-box">
       <div class="btn-control btn-prev" @click="prevImg"><i class="fa fa-angle-left" aria-hidden="true"></i></div>
       <img class="pic-view" :src="dataPic | mediumGoogleImage">
-      <a @click="downloaded"><i class="fa fa-download" aria-hidden="true"></i></a>
+      <a class="btn-download" :href="dataPic | fullGoogleImage" download><i class="fa fa-download" aria-hidden="true"></i></a>
       <div class="btn-control btn-next" @click="nextImg"><i class="fa fa-angle-right" aria-hidden="true"></i></div>
     </div>
   </div>
@@ -17,29 +17,6 @@ export default {
     });
   },
   methods: {
-    toDataURL(url, callback) {
-      // var xhr = new XMLHttpRequest();
-      // xhr.onload = function() {
-      //   var reader = new FileReader();
-      //   reader.onloadend = function() {
-      //     callback(reader.result);
-      //   }
-      //   reader.readAsDataURL(xhr.response);
-      // };
-      // xhr.open('GET', url);
-      // xhr.responseType = 'blob';
-      // xhr.send();
-      var restRequest = gapi.client.request({
-        'path': url
-      });
-      console.log(restRequest)
-    },
-    downloaded () {
-      let urlImg = this.$options.filters.mediumGoogleImage(this.dataPic)
-      this.$http.get(urlImg).then(res => {
-        console.log(res.body)
-      })
-    },
     closeBox () {
       this.$emit('closeBox', 1)
     },
@@ -66,6 +43,12 @@ export default {
   background-color: rgba(0,0,0,0.8);
   z-index: 1000;
 }
+.btn-download {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
 .picture-box {
   width: 70%;
   max-height: 600px;
@@ -90,7 +73,7 @@ export default {
   transform: translateY(-50%);
 }
 .fa-download {
-  font-size: 60px;
+  font-size: 40px;
   color: white;
 }
 .btn-control {
