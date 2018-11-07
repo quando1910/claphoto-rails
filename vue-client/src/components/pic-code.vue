@@ -1,5 +1,7 @@
 <template>
   <div id="cp-content-wrap" class="cp-content-wrap">
+    <loading-time id="loadingpos"/>
+    <picture-box v-if="show" :dataPic="picView" @closeBox="getCloseBox" @nextImg="getNextImg" @prevImg="getPrevImg"/>
     <div class="container view-container">
       <div class="row"> 
         <div class="cp-pagination col-md-10 col-sm-10 view-pic">
@@ -36,7 +38,8 @@
                   <figure class="cp-hover-eff"> 
                     <progressive-img class="product-photo" alt="img02" :src="item | smallGoogleImage"/>
                     <figcaption>
-                      <h3>{{itemPics.name.split(',')[ind]}}</h3><a :href="item | mediumGoogleImage" data-rel="prettyPhoto"><i class="fa fa-search"></i> View Large</a> 
+                      <h3>{{itemPics.name.split(',')[ind]}}</h3>
+                      <a class="open-image" @click="openImage(item, ind)"><i class="fa fa-search"></i> View Large</a> 
                     </figcaption>
                   </figure>
                 </div>
@@ -70,23 +73,27 @@
     </div>
   </div>
 </template>
-
 <script>
 import * as types from '../store/types'
 export default {
   name: 'PicCode',
   data () {
     return {
+      pos: null,
+      currentPage: null,
+      show: false,
       pictures: null,
       picArr: null,
       nameArr: null,
       contract: null,
       intervalId: null,
-      pages: 0
+      pages: 0,
+      picView: null
     }
   },
   created () {
-    window.addEventListener('load', () => { console.log("It's loaded!"); $(window).trigger("resize"); window.clearInterval(this.intervalId);})
+    $('#loadingpos').show()
+    window.addEventListener('load', () => { console.log("It's loaded!"); $(window).trigger("resize"); window.clearInterval(this.intervalId);  $('#loadingpos').hide();})
     this.$http.get(`${types.SHOW_VIEWER}/${this.$route.params.code}`).then(res => {
       this.contract = res.body.contract
       this.pictures = res.body.meta.pic
@@ -132,9 +139,32 @@ export default {
       index = index? index -1 : 0
       return this.pictures[index].pictureId.split(',')
     },
+    openImage (value, index) {
+      this.show = true
+      this.pos = index
+      this.currentPage = this.$route.query.page ? this.$route.query.page : 1
+      this.picView = value
+    },
     convertPicName (index) {
       index = index? index -1 : 0
       return this.pictures[index].name.split(',')
+    },
+    getCloseBox (value) {
+      this.show = !(value === 1)
+    },
+    getNextImg (value) {
+      this.pos = this.pos + 1
+      this.picView = this.pictures[this.currentPage-1].pictureId.split(',')[this.pos]
+      $('.pic-view').on('load', function(){
+        $('#loadingpos').hide();
+      });
+    },
+    getPrevImg (value) {
+      this.pos = this.pos - 1
+      this.picView = this.pictures[this.currentPage-1].pictureId.split(',')[this.pos]
+      $('.pic-view').on('load', function(){
+        $('#loadingpos').hide();
+      });
     }
   }
 }
@@ -150,5 +180,12 @@ export default {
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+#loadingpos {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1200;
 }
 </style>

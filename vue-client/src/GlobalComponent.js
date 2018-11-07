@@ -10,11 +10,13 @@ import PostPreview from './components/ComponentGlobal/post-preview.vue'
 import ArticleItem from './components/ComponentGlobal/article-item.vue'
 import ArticleList from './components/ComponentGlobal/article-list.vue'
 import ArticleDetail from './components/ComponentGlobal/article-detail.vue'
-import PriceItem from './components/ComponentGlobal/price-item'
-import Sidebar from './components/ComponentGlobal/side-bar'
-import Tag from './components/ComponentGlobal/tag'
-import Gift from './components/ComponentGlobal/gift'
-import Noti from './components/ComponentGlobal/notification'
+import PriceItem from './components/ComponentGlobal/price-item.vue'
+import Sidebar from './components/ComponentGlobal/side-bar.vue'
+import Tag from './components/ComponentGlobal/tag.vue'
+import Gift from './components/ComponentGlobal/gift.vue'
+import Noti from './components/ComponentGlobal/notification.vue'
+import PictureBox from './components/ComponentGlobal/picture-box.vue'
+import Loading from './components/ComponentGlobal/loading.vue'
 
 /**
  * You can register global components here and use them as a plugin in your main Vue instance
@@ -39,6 +41,8 @@ const GlobalComponents = {
     Vue.component('tag', Tag)
     Vue.component('gift', Gift)
     Vue.component('noti', Noti)
+    Vue.component('picture-box', PictureBox)
+    Vue.component('loading-time', Loading)
   }
 }
 

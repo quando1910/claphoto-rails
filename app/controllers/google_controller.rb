@@ -53,8 +53,8 @@ class GoogleController < ApplicationController
         },
         :state =>  @id,
         :scope => 'https://www.googleapis.com/auth/drive.metadata.readonly',
-        # :redirect_uri => "http://localhost:3000/oauth2callback" )
-        :redirect_uri => "http://manage.theclassic.studio/oauth2callback" )
+        :redirect_uri => "http://localhost:3000/oauth2callback" )
+        # :redirect_uri => "http://manage.theclassic.studio/oauth2callback" )
       auth_uri = auth_client.authorization_uri.to_s
       redirect_to(auth_uri)
     else

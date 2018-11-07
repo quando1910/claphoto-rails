@@ -4,7 +4,7 @@
       <div class="widget author-widget">
         <div class="fb-page" data-href="https://www.facebook.com/classic.yearbook/" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/classic.yearbook/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/classic.yearbook/">The Classic Studio - Kỷ yếu số 1 Đà Thành</a></blockquote></div>
         <h3>About The Classic</h3>
-        <div class="widget-content"> <img src="images/author.jpg" alt="">
+        <div class="widget-content">
           <p>Chúng tôi luôn cố mang lại những điều tuyệt vời nhất, những trải nghiệm tốt nhất cho học sinh, sinh viên và những đối tượng khách hàng khác. Kỉ yếu chỉ chụp cùng nhau 1 lần trong đời, nên trải nghiệm ngày chụp là điều quan trọng nhất.</p>
         </div>
       </div>
