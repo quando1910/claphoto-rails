@@ -19,7 +19,7 @@ Vue.filter('smallGoogleImage', function (value) {
 })
 
 Vue.filter('mediumGoogleImage', function (value) {
-  return `https://drive.google.com/thumbnail?id=${value}&sz=w928-h600`
+  return `https://drive.google.com/thumbnail?id=${value}&sz=w2048-h1365`
 })
 
 Vue.filter('fullGoogleImage', function (value) {
