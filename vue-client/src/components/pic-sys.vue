@@ -1,6 +1,5 @@
 <template>
   <div id="cp-content-wrap" class="page404 cp-login-page">
-    <picture-box/>
     <div class="container">
       <div class="row">
         <div class="col-md-12">
