@@ -9,6 +9,7 @@
             <h2>{{contract.group}} - {{contract.school}}</h2>
             <p>{{contract.town}}</p>
             <p>Niên Khóa: {{contract.school_year}}</p>
+            <p>Tổng: <b>{{totalPic()}} tấm</b></p>
             <hr>
           </div>
           <nav>
@@ -33,6 +34,7 @@
         <div class="col-md-10 col-sm-10 view-pic">
           <transition name="fade">
             <div class="cp-grid-isotope gallery" v-if="pictures && ($route.query.page ? $route.query.page : 1)  == (index + 1)" v-for="(itemPics, index) of pictures" :key="index">
+              <p style="text-align: center">{{itemPics.pictureId.split(',').length}} tấm trong thư mục này</p>
               <div class="isotope items">
                 <div class="item" v-for="(item, ind) of itemPics.pictureId.split(',')" :key="ind">
                   <figure class="cp-hover-eff"> 
@@ -165,6 +167,11 @@ export default {
       $('.pic-view').on('load', function(){
         $('#loadingpos').hide();
       });
+    },
+    totalPic() {
+      return this.pictures.map(x=> x.pictureId.split(',').length).reduce((acc,curr) => {
+        return acc + curr
+      }, 0)
     }
   }
 }

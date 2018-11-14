@@ -1,5 +1,5 @@
 class GoogleController < ApplicationController
-  require 'google/apis/drive_v2'
+  require 'google/apis/drive_v3'
   require 'google/api_client/client_secrets'
   require "net/http"
   require "uri"
@@ -72,7 +72,7 @@ class GoogleController < ApplicationController
     client_opts = JSON.parse(session[:credentials])
     #excute here
     auth_client = Signet::OAuth2::Client.new(client_opts)
-    drive = Google::Apis::DriveV2::DriveService.new
+    drive = Google::Apis::DriveV3::DriveService.new
     # encode
     img_arr = []
     @viewers = Contract.find(session[:id]).viewers.where(typeFile: 1)
@@ -80,12 +80,13 @@ class GoogleController < ApplicationController
     @viewers.each do |v|
       drive_id = v.drive_link.split(',')
       drive_id.each do |d|
-        files = drive.list_files( q: "'#{d}' in parents",
-                                  fields: 'items(id, original_filename, alternate_link)',
+        files = drive.list_files( page_size: 500,
+                                  q: "'#{d}' in parents",
+                                  fields: 'files(id, original_filename)',
                                   options: { authorization: auth_client })
         image_ids = []
         image_names = []
-        files.items.sort {|x,y| y.original_filename <=> x.original_filename }.each do |image|
+        files.files.sort {|x,y| y.original_filename <=> x.original_filename }.each do |image|
           image_ids.push(image.id)
           image_names.push(image.original_filename)
         end
