@@ -10,6 +10,8 @@
             <p>{{contract.town}}</p>
             <p>Niên Khóa: {{contract.school_year}}</p>
             <p>Tổng: <b>{{totalPic()}} tấm</b></p>
+            <p>Link ảnh gốc </p>
+            <p v-for="(item, index) of raws.drive_link.split(',')" :key="index"><a target="_blank" :href="item" >{{item}}</a></p>
             <hr>
           </div>
           <nav>
@@ -89,6 +91,7 @@ export default {
       nameArr: null,
       contract: null,
       intervalId: null,
+      raws: null,
       pages: 0,
       picView: null
     }
@@ -99,6 +102,8 @@ export default {
     this.$http.get(`${types.SHOW_VIEWER}/${this.$route.params.code}`).then(res => {
       this.contract = res.body.contract
       this.pictures = res.body.meta.pic
+      this.raws = res.body.meta.raw
+      console.log(12, res.body)
       this.pages = res.body.meta.count
     })
     this.intervalId = window.setInterval(() => {

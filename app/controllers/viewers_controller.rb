@@ -20,8 +20,9 @@ class ViewersController < ApplicationController
     end
     if @view
       @link = @view.viewers.find_by(typeFile: 1)
+      @raws = @view.viewers.find_by(typeFile: 0)
       @pics = @link.pictures
-      render json: @view, serializer:  ContractSerializer, meta: {pic: @pics, count: @link.drive_link.split(',').length }
+      render json: @view, serializer:  ContractSerializer, meta: {pic: @pics, raw: @raws, count: @link.drive_link.split(',').length }
     else
       render status: 404
     end
