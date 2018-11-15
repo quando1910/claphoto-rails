@@ -113,7 +113,7 @@ ActiveAdmin.register Contract do
       view.inputs 'View', :multipart => true do 
         view.input :email
         view.input :pwd
-        view.input :drive_link
+        view.text_area :drive_link
         view.input :typeFile
       end
     end
