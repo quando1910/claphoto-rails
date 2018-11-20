@@ -38,9 +38,9 @@
             <div class="cp-grid-isotope gallery" v-if="pictures && ($route.query.page ? $route.query.page : 1)  == (index + 1)" v-for="(itemPics, index) of pictures" :key="index">
               <p style="text-align: center">{{itemPics.pictureId.split(',').length}} tấm trong thư mục này</p>
               <div class="isotope items">
-                <div class="item" v-for="(item, ind) of itemPics.pictureId.split(',')" :key="ind">
+                <div v-lazy-container="{ selector: 'img' }" class="item" v-for="(item, ind) of itemPics.pictureId.split(',')" :key="ind">
                   <figure class="cp-hover-eff"> 
-                    <progressive-img class="product-photo" alt="img02" :src="item | smallGoogleImage"/>
+                    <img class="product-photo" alt="img02" :data-src="item | smallGoogleImage"/>
                     <figcaption>
                       <h3>{{itemPics.name.split(',')[ind]}}</h3>
                       <a class="open-image" @click="openImage(item, ind)"><i class="fa fa-search"></i> View Large</a> 
@@ -79,6 +79,8 @@
 </template>
 <script>
 import * as types from '../store/types'
+
+var count = 0;
 export default {
   name: 'PicCode',
   data () {
@@ -89,6 +91,8 @@ export default {
       pictures: null,
       picArr: null,
       nameArr: null,
+      data: [],
+      busy: false,
       contract: null,
       intervalId: null,
       raws: null,
@@ -98,7 +102,7 @@ export default {
   },
   created () {
     $('#loadingpos').show()
-    window.addEventListener('load', () => { console.log("It's loaded!"); $(window).trigger("resize"); window.clearInterval(this.intervalId);  $('#loadingpos').hide();})
+    window.addEventListener('load', () => {$('#loadingpos').hide();})
     this.$http.get(`${types.SHOW_VIEWER}/${this.$route.params.code}`).then(res => {
       this.contract = res.body.contract
       this.pictures = res.body.meta.pic
@@ -106,10 +110,13 @@ export default {
       console.log(12, res.body)
       this.pages = res.body.meta.count
     })
+    // this.$Lazyload.$on('loaded', function (listener) {
+    //   console.log(222123123)
+    // })
     this.intervalId = window.setInterval(() => {
         $(window).trigger("resize")
         console.log('resize')
-    },4000);
+    },15000);
   },
   updated() {
     if ($(".cp-grid-isotope .isotope").length) {
@@ -145,6 +152,16 @@ export default {
     convertPicId (index) {
       index = index? index -1 : 0
       return this.pictures[index].pictureId.split(',')
+    },
+    loadMore () {
+      this.busy = true;
+      console.log(1332)
+      setTimeout(() => {
+        for (var i = 0, j = 10; i < j; i++) {
+          this.data.push({ name: count++ });
+        }
+        this.busy = false;
+      }, 1000);
     },
     openImage (value, index) {
       this.show = true

@@ -13,6 +13,7 @@ import VueI18n from 'vue-i18n'
 import i18n from './locales/config'
 import ElementUI from 'element-ui'
 import VueProgressiveImage from 'vue-progressive-image'
+import VueLazyload from 'vue-lazyload'
 import 'element-ui/lib/theme-chalk/index.css'
 
 import './assets/css/bootstrap.css'
@@ -27,6 +28,10 @@ Vue.use(router)
 Vue.use(VueResource)
 Vue.use(GlobalComponents)
 Vue.use(VueProgressiveImage)
+
+Vue.use(VueLazyload, {
+  preLoad: 2.0
+})
 
 Vue.http.options.root = process.env.SERVER_IP
 
