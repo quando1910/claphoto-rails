@@ -11,7 +11,9 @@
             <p>Niên Khóa: {{contract.school_year}}</p>
             <p>Tổng: <b>{{totalPic()}} tấm</b></p>
             <p>Link ảnh gốc </p>
-            <p v-if="raws != null" v-for="(item, index) of raws.drive_link.split(',')" :key="index"><a target="_blank" :href="item" >{{item}}</a></p>
+            <div v-if="raws != null">
+            <p v-for="(item, index) of raws.drive_link.split(',')" :key="index"><a target="_blank" :href="item" >{{item}}</a></p>
+            </div>
             <hr>
           </div>
           <nav>
