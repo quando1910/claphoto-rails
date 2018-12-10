@@ -81,3 +81,5 @@ Thumbs.db
 
 # Lock
 /package-lock.json
+
+docker-compose.yml

@@ -1,7 +1,7 @@
 <template>
   <div id="cp-content-wrap" class="cp-content-wrap">
     <loading-time id="loadingpos"/>
-    <picture-box v-if="show" :dataPic="picView" @closeBox="getCloseBox" @nextImg="getNextImg" @prevImg="getPrevImg"/>
+    <picture-box id="pictureBox" :dataPic="picView" @closeBox="getCloseBox" @nextImg="getNextImg" @prevImg="getPrevImg"/>
     <div class="container view-container">
       <div class="row"> 
         <div class="cp-pagination col-md-10 col-sm-10 view-pic">
@@ -37,12 +37,12 @@
         <div class="col-md-2 col-sm-2"></div>
         <div class="col-md-10 col-sm-10 view-pic">
           <transition name="fade">
-            <div class="cp-grid-isotope gallery" v-if="pictures && ($route.query.page ? $route.query.page : 1)  == (index + 1)" v-for="(itemPics, index) of pictures" :key="index">
+            <div class="cp-grid-isotope gallery" v-if="pictures && ($route.query.page ? $route.query.page : 1)  == (index + 1)" v-for="(itemPics, index) of pictures" :key="itemPics">
               <p style="text-align: center">{{itemPics.pictureId.split(',').length}} tấm trong thư mục này</p>
               <div class="isotope items">
                 <div v-lazy-container="{ selector: 'img' }" class="item" v-for="(item, ind) of itemPics.pictureId.split(',')" :key="ind">
                   <figure class="cp-hover-eff"> 
-                    <img class="product-photo" alt="img02" :data-src="item | smallGoogleImage"/>
+                    <img class="product-photo" alt="img02" :data-src="item | smallGoogleImage" keep-alive/>
                     <figcaption>
                       <h3>{{itemPics.name.split(',')[ind]}}</h3>
                       <a class="open-image" @click="openImage(item, ind)"><i class="fa fa-search"></i> View Large</a> 
@@ -118,9 +118,17 @@ export default {
     this.intervalId = window.setInterval(() => {
         $(window).trigger("resize")
         console.log('resize')
-    },15000);
+    },15000)
+  },
+  mounted () {
+    // if (this.$route.query.pictureId && this.$route.query.pos) {
+    //   this.openImage(this.$route.query.pictureId, this.$route.query.pos)
+    // }
   },
   updated() {
+    if (this.$route.query.pictureId && this.$route.query.pos) {
+      this.openImage(this.$route.query.pictureId, this.$route.query.pos)
+    }
     if ($(".cp-grid-isotope .isotope").length) {
       var $container = $('.cp-grid-isotope .isotope');
       $container.isotope({
@@ -166,28 +174,39 @@ export default {
       }, 1000);
     },
     openImage (value, index) {
-      this.show = true
-      this.pos = index
-      this.currentPage = this.$route.query.page ? this.$route.query.page : 1
-      this.picView = value
+      // this.show = true
+      window.history.pushState(null, '', `?pictureId=${value}&pos=${index}`)
+      $('#pictureBox').show()
+      $('.pic-view').attr('src', this.$options.filters.mediumGoogleImage(value))
+      $('.pic-view').attr('pos', index)
+      $('.pic-view').attr('page', this.$route.query.page ? this.$route.query.page : 1)
+      // this.pos = index
+      // this.currentPage = this.$route.query.page ? this.$route.query.page : 1
+      // this.picView = value
     },
     convertPicName (index) {
       index = index? index -1 : 0
       return this.pictures[index].name.split(',')
     },
     getCloseBox (value) {
-      this.show = !(value === 1)
+      window.history.replaceState(null, null, window.location.pathname)
+      $('#pictureBox').hide()
     },
     getNextImg (value) {
-      this.pos = this.pos + 1
-      this.picView = this.pictures[this.currentPage-1].pictureId.split(',')[this.pos]
-      $('.pic-view').on('load', function(){
-        $('#loadingpos').hide();
-      });
+      var pos = +$('.pic-view').attr('pos') + 1
+      this.setImage(pos)
     },
     getPrevImg (value) {
-      this.pos = this.pos - 1
-      this.picView = this.pictures[this.currentPage-1].pictureId.split(',')[this.pos]
+      var pos = +$('.pic-view').attr('pos') - 1
+      this.setImage(pos)
+    },
+    setImage (pos) {
+      var page = +$('.pic-view').attr('page') - 1
+      var picView = this.pictures[page].pictureId.split(',')[pos]
+      window.history.replaceState(null, '', `?pictureId=${picView}&pos=${pos}`)
+      $('.pic-view').attr('pos', pos)
+      $('.pic-view').attr('page', this.$route.query.page ? this.$route.query.page : 1)
+      $('.pic-view').attr('src', this.$options.filters.mediumGoogleImage(picView))
       $('.pic-view').on('load', function(){
         $('#loadingpos').hide();
       });
@@ -218,5 +237,9 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1200;
+}
+
+#pictureBox {
+  display: none;
 }
 </style>

@@ -30,7 +30,13 @@ Vue.use(GlobalComponents)
 Vue.use(VueProgressiveImage)
 
 Vue.use(VueLazyload, {
-  preLoad: 2.0
+  preLoad: 2.0,
+  attempt: 1,
+  observer: true,
+  observerOptions: {
+    rootMargin: '0px',
+    threshold: 0.1
+  }
 })
 
 Vue.http.options.root = process.env.SERVER_IP
