@@ -175,11 +175,12 @@ export default {
     },
     openImage (value, index) {
       // this.show = true
-      window.history.pushState(null, '', `?pictureId=${value}&pos=${index}`)
+      var page = this.$route.query.page ? this.$route.query.page : 1
+      window.history.pushState(null, '', `?page=${page}&pictureId=${value}&pos=${index}`)
       $('#pictureBox').show()
       $('.pic-view').attr('src', this.$options.filters.mediumGoogleImage(value))
       $('.pic-view').attr('pos', index)
-      $('.pic-view').attr('page', this.$route.query.page ? this.$route.query.page : 1)
+      $('.pic-view').attr('page', page)
       // this.pos = index
       // this.currentPage = this.$route.query.page ? this.$route.query.page : 1
       // this.picView = value
@@ -189,7 +190,7 @@ export default {
       return this.pictures[index].name.split(',')
     },
     getCloseBox (value) {
-      window.history.replaceState(null, null, window.location.pathname)
+      window.history.pushState(null, '', `?page=${this.$route.query.page ? this.$route.query.page : 1}`)
       $('#pictureBox').hide()
     },
     getNextImg (value) {
@@ -203,7 +204,7 @@ export default {
     setImage (pos) {
       var page = +$('.pic-view').attr('page') - 1
       var picView = this.pictures[page].pictureId.split(',')[pos]
-      window.history.replaceState(null, '', `?pictureId=${picView}&pos=${pos}`)
+      window.history.replaceState(null, '', `?page=${page + 1}}&pictureId=${picView}&pos=${pos}`)
       $('.pic-view').attr('pos', pos)
       $('.pic-view').attr('page', this.$route.query.page ? this.$route.query.page : 1)
       $('.pic-view').attr('src', this.$options.filters.mediumGoogleImage(picView))
