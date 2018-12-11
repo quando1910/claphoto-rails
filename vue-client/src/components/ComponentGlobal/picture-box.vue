@@ -2,15 +2,14 @@
   <div class="pp_overlay1" @click="closeBox">
     <div id="picturebox" class="picture-box">
       <div class="btn-hover btn-control btn-prev" @click="prevImg"><i class="fa fa-angle-left" aria-hidden="true"></i></div>
-      <img class="pic-view" :src="dataPic | mediumGoogleImage">
-      <a class="btn-hover  btn-download" :href="dataPic | fullGoogleImage" download><i class="fa fa-download" aria-hidden="true"></i></a>
+      <img class="pic-view">
+      <a class="btn-hover  btn-download pic-download" download><i class="fa fa-download" aria-hidden="true"></i></a>
       <div class="btn-hover btn-control btn-next" @click="nextImg"><i class="fa fa-angle-right" aria-hidden="true"></i></div>
     </div>
   </div>
 </template>
 <script>
 export default {
-  props: ['dataPic'],
   mounted() {
     $('#picturebox').click(function(event){
       event.stopPropagation()

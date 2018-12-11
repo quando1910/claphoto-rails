@@ -181,6 +181,7 @@ export default {
       $('.pic-view').attr('src', this.$options.filters.mediumGoogleImage(value))
       $('.pic-view').attr('pos', index)
       $('.pic-view').attr('page', page)
+      $('.pic-download').attr('href', this.$options.filters.fullGoogleImage(value))
       // this.pos = index
       // this.currentPage = this.$route.query.page ? this.$route.query.page : 1
       // this.picView = value
@@ -194,15 +195,18 @@ export default {
       $('#pictureBox').hide()
     },
     getNextImg (value) {
-      var pos = +$('.pic-view').attr('pos') + 1
-      this.setImage(pos)
+      let page = +$('.pic-view').attr('page') - 1
+      let range = this.pictures[page].pictureId.split(',').length
+      let pos = +$('.pic-view').attr('pos') === 499 ? 0 : (+$('.pic-view').attr('pos') + 1)
+      this.setImage(pos, page)
     },
     getPrevImg (value) {
-      var pos = +$('.pic-view').attr('pos') - 1
-      this.setImage(pos)
+      let page = +$('.pic-view').attr('page') - 1
+      let range = this.pictures[page].pictureId.split(',').length
+      let pos = +$('.pic-view').attr('pos') === 0 ? (range - 1) : (+$('.pic-view').attr('pos') - 1)
+      this.setImage(pos, page)
     },
-    setImage (pos) {
-      var page = +$('.pic-view').attr('page') - 1
+    setImage (pos, page) {
       var picView = this.pictures[page].pictureId.split(',')[pos]
       window.history.replaceState(null, '', `?page=${page + 1}}&pictureId=${picView}&pos=${pos}`)
       $('.pic-view').attr('pos', pos)
@@ -211,6 +215,7 @@ export default {
       $('.pic-view').on('load', function(){
         $('#loadingpos').hide();
       });
+     $('.pic-download').attr('href', this.$options.filters.fullGoogleImage(picView))
     },
     totalPic() {
       return this.pictures.map(x=> x.pictureId.split(',').length).reduce((acc,curr) => {

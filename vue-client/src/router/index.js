@@ -19,6 +19,7 @@ import Stories from '@/components/stories'
 import StoryDetail from '@/components/story-detail'
 import PicSys from '@/components/pic-sys'
 import PicCode from '@/components/pic-code'
+import Contracts from '@/components/contracts'
 
 // import Info from '@/components/info'
 // import Preview from '@/components/post/post-preview'
@@ -77,6 +78,11 @@ const router = new Router({
       path: '/decoration',
       component: Decoration,
       name: 'Decoration'
+    },
+    {
+      path: '/contracts',
+      component: Contracts,
+      name: 'Contracts'
     },
     {
       path: '/videos',
