@@ -24,14 +24,14 @@ services:
     environment:
       - APP_DIR=/vue-frontend
     # command: npm run dev
-    command: npm run prod
+    command: npm run dev
     container_name: vue-frontend
     image: vue-client
     volumes:
       - ./vue-client:/vue-frontend/:rw
       - /vue-frontend/node_modules
     ports:
-      - "8080:8080" # specify port forewarding
+      - "8888:8080" # specify port forewarding
     restart: always
     
   media: # name of the first service

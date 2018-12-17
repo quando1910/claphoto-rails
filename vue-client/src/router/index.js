@@ -80,7 +80,7 @@ const router = new Router({
       name: 'Decoration'
     },
     {
-      path: '/contracts',
+      path: '/contracts/:token/:id',
       component: Contracts,
       name: 'Contracts'
     },
