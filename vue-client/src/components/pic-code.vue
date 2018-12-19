@@ -197,7 +197,7 @@ export default {
     getNextImg (value) {
       let page = +$('.pic-view').attr('page') - 1
       let range = this.pictures[page].pictureId.split(',').length
-      let pos = +$('.pic-view').attr('pos') === 499 ? 0 : (+$('.pic-view').attr('pos') + 1)
+      let pos = +$('.pic-view').attr('pos') === (range - 1) ? 0 : (+$('.pic-view').attr('pos') + 1)
       this.setImage(pos, page)
     },
     getPrevImg (value) {
@@ -208,7 +208,7 @@ export default {
     },
     setImage (pos, page) {
       var picView = this.pictures[page].pictureId.split(',')[pos]
-      window.history.replaceState(null, '', `?page=${page + 1}}&pictureId=${picView}&pos=${pos}`)
+      window.history.replaceState(null, '', `?page=${page + 1}&pictureId=${picView}&pos=${pos}`)
       $('.pic-view').attr('pos', pos)
       $('.pic-view').attr('page', this.$route.query.page ? this.$route.query.page : 1)
       $('.pic-view').attr('src', this.$options.filters.mediumGoogleImage(picView))
