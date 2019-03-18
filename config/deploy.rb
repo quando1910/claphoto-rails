@@ -1,12 +1,17 @@
 
 set :application, "classic_photo"
-set :repo_url, "git@github.com:at-quando/ps-Classic-Photo-project.git"
+set :repo_url, "git@github.com:quando1910/claphoto-rails.git"
 set :pty, true
 set :linked_files, %w(config/database.yml config/application.yml)
 set :linked_dirs, %w(log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/uploads)
 set :keep_releases, 5
-set :rvm_type, :user
-set :deploy_to, "/deploy/apps/classic_photo"
+set :rbenv_type, :user # or :system, depends on your rbenv setup
+set :rbenv_ruby, '2.5.3'
+set :deploy_to, "/var/www/theclassic.studio/app"
+
+set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
+set :rbenv_map_bins, %w{rake gem bundle ruby rails}
+set :rbenv_roles, :all # default value
 
 set :puma_rackup, -> {File.join(current_path, "config.ru")}
 set :puma_state, -> {"#{shared_path}/tmp/pids/puma.state"}
