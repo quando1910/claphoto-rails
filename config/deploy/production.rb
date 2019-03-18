@@ -60,5 +60,5 @@
 #   }
 set :stage, :production
 set :rails_env, :production
-set :branch,  :deploy
+set :branch,  :master
 server "178.128.22.245", user: "deploy", roles: %w(web app db)

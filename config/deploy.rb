@@ -1,5 +1,7 @@
 
 set :application, "classic_photo"
+set :user_sudo, true
+set :sudo, "sudo -u deploy -i"
 set :repo_url, "git@github.com:quando1910/claphoto-rails.git"
 set :pty, true
 set :linked_files, %w(config/database.yml config/application.yml)
