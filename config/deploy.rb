@@ -12,7 +12,7 @@ set :rbenv_ruby, '2.5.3'
 set :deploy_to, "/var/www/theclassic.studio/app"
 
 set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
-set :rbenv_map_bins, %w{rake gem bundle ruby rails}
+# set :rbenv_map_bins, %w{rake gem bundle ruby rails}
 set :rbenv_roles, :all # default value
 
 set :puma_rackup, -> {File.join(current_path, "config.ru")}
