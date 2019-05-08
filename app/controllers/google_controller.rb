@@ -53,7 +53,7 @@ class GoogleController < ApplicationController
         },
         :state =>  @id,
         :scope => 'https://www.googleapis.com/auth/drive.metadata.readonly',
-        :redirect_uri => "http://manage.theclassic.studio/oauth2callback" )
+        :redirect_uri => "http://localhost:3000/oauth2callback" )
         # :redirect_uri => "http://manage.theclassic.studio/oauth2callback" )
       auth_uri = auth_client.authorization_uri.to_s
       redirect_to(auth_uri)
@@ -80,22 +80,24 @@ class GoogleController < ApplicationController
     @viewers.each do |v|
       drive_id = v.drive_link.split(',')
       drive_id.each do |d|
-        files = drive.list_files( page_size: 500,
-                                  q: "'#{d}' in parents",
-                                  fields: 'files(id, original_filename)',
-                                  options: { authorization: auth_client })
-        image_ids = []
-        image_names = []
-        files.files.sort {|x,y| y.original_filename <=> x.original_filename }.each do |image|
-          image_ids.push(image.id)
-          image_names.push(image.original_filename)
+        if !Picture.find_by(folder: d)
+          files = drive.list_files( page_size: 500,
+                                    q: "'#{d}' in parents",
+                                    fields: 'files(id, original_filename)',
+                                    options: { authorization: auth_client })
+          image_ids = []
+          image_names = []
+          files.files.sort {|x,y| y.original_filename <=> x.original_filename }.each do |image|
+            image_ids.push(image.id)
+            image_names.push(image.original_filename)
+          end
+          str_img_ids = image_ids.join(',')
+          str_img_names = image_names.join(',')
+          img_arr.push({pictureId: str_img_ids, name: str_img_names, mimeType: 'image/jpeg', folder: d, viewer_id: v.id})
         end
-        str_img_ids = image_ids.join(',')
-        str_img_names = image_names.join(',')
-        img_arr.push({pictureId: str_img_ids, name: str_img_names, mimeType: 'image/jpeg', folder: d, viewer_id: v.id})
       end
     end
-    if Picture.create(img_arr)
+    if img_arr.length > 0 && Picture.create(img_arr)
       redirect_to admin_contract_path(session[:id])
     else 
       render status: 400

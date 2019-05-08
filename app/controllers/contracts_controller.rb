@@ -16,6 +16,16 @@ class ContractsController < ApplicationController
     end
   end
 
+  def public_create
+    test = params.permit(:school, :name, :group, :code)
+    @contract = Contract.new(test)
+    if @contract.save
+      render json: @contract
+    else
+      render json: {message: 'cannot create'}
+    end
+  end
+
   def scription
     @contract = Contract.find(params[:id])
   end

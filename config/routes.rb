@@ -50,6 +50,7 @@ Rails.application.routes.draw do
   post "/upload_image" => "upload#upload_image", :as => :upload_image
   get "/download_file/:name" => "upload#access_file", :as => :access_file, :name => /.*/
   get 'oauth2callback' => 'google#oauth', :as => :google_photos
+  post '/public/contracts' => 'contracts#public_create', :as => :public_creation
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
