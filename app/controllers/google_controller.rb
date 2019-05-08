@@ -52,7 +52,8 @@ class GoogleController < ApplicationController
           "include_granted_scopes" => "true"
         },
         :state =>  @id,
-        :scope => 'https://www.googleapis.com/auth/drive.metadata.readonly',
+        # :scope => 'https://www.googleapis.com/auth/drive.metadata.readonly',
+        :scope => 'https://www.googleapis.com/auth/drive',
         :redirect_uri => "http://localhost:3000/oauth2callback" )
         # :redirect_uri => "http://manage.theclassic.studio/oauth2callback" )
       auth_uri = auth_client.authorization_uri.to_s
@@ -66,6 +67,17 @@ class GoogleController < ApplicationController
   end
 
   def oauth
+    unless session.has_key?(:credentials)
+      redirect_to('/oauth2callback')
+    end
+    client_opts = JSON.parse(session[:credentials])
+    #excute here
+    auth_client = Signet::OAuth2::Client.new(client_opts)
+    drive = Google::Apis::DriveV3::DriveService.new
+    redirect_to admin_contracts_path
+  end
+
+  def get_images
     unless session.has_key?(:credentials)
       redirect_to('/oauth2callback')
     end
@@ -104,4 +116,38 @@ class GoogleController < ApplicationController
     end
   end
 
+  def init_folder
+    unless session.has_key?(:credentials)
+      redirect_to('/oauth2callback')
+    end
+    uri   = URI.parse(request.fullpath)
+    @folders = 2
+    if uri.query
+      params = CGI.parse(uri.query)
+      @folders  = params['folder'].first
+    end
+    client_opts = JSON.parse(session[:credentials])
+    #excute here
+    auth_client = Signet::OAuth2::Client.new(client_opts)
+    drive = Google::Apis::DriveV3::DriveService.new
+    drive.authorization = auth_client
+    (@folders.to_i).times.each do |i|
+      file_metadata = {
+        name: "Image #{i + 1}",
+        mime_type: 'application/vnd.google-apps.folder'
+      }
+      file = drive.create_file(file_metadata, fields: 'id')
+      puts "Folder Id: #{file.id}"
+      drive.batch do |service|
+        user_permission = {
+            type: 'anyone',
+            role: 'reader'
+        }
+        service.create_permission(file.id,
+                                  user_permission,
+                                  fields: 'id')
+      end
+    end
+    redirect_to admin_contracts_path
+  end
 end

@@ -51,6 +51,8 @@ Rails.application.routes.draw do
   get "/download_file/:name" => "upload#access_file", :as => :access_file, :name => /.*/
   get 'oauth2callback' => 'google#oauth', :as => :google_photos
   post '/public/contracts' => 'contracts#public_create', :as => :public_creation
+  get '/init_folder' => 'google#init_folder', :as => :init_folder
+  get '/get_images' => 'google#get_images', :as => :get_images
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
