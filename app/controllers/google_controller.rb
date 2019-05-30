@@ -78,6 +78,15 @@ class GoogleController < ApplicationController
   end
 
   def get_images
+    uri   = URI.parse(request.fullpath)
+    @id = ''
+    if uri.query
+      params = CGI.parse(uri.query)
+      @id  = params['id'].first
+    end
+    if @id 
+      session[:id] = @id
+    end
     unless session.has_key?(:credentials)
       redirect_to('/oauth2callback')
     end
@@ -117,6 +126,15 @@ class GoogleController < ApplicationController
   end
 
   def init_folder
+    uri   = URI.parse(request.fullpath)
+    @id = ''
+    if uri.query
+      params = CGI.parse(uri.query)
+      @id  = params['id'].first
+    end
+    if @id 
+      session[:id] = @id
+    end
     unless session.has_key?(:credentials)
       redirect_to('/oauth2callback')
     end
@@ -131,12 +149,14 @@ class GoogleController < ApplicationController
     auth_client = Signet::OAuth2::Client.new(client_opts)
     drive = Google::Apis::DriveV3::DriveService.new
     drive.authorization = auth_client
+    result = ''
     (@folders.to_i).times.each do |i|
       file_metadata = {
         name: "Image #{i + 1}",
         mime_type: 'application/vnd.google-apps.folder'
       }
       file = drive.create_file(file_metadata, fields: 'id')
+      result = result + ',' + file.id
       puts "Folder Id: #{file.id}"
       drive.batch do |service|
         user_permission = {
@@ -148,6 +168,13 @@ class GoogleController < ApplicationController
                                   fields: 'id')
       end
     end
-    redirect_to admin_contracts_path
+    result = result[1..-1]
+    @viewers = Contract.find(session[:id]).viewers.where(typeFile: 1)
+    @viewers[0].drive_link = result
+    if @viewers[0].save
+      redirect_to admin_contract_path(session[:id])
+    else
+      redirect_to admin_contracts_path
+    end
   end
 end

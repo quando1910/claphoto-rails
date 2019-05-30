@@ -119,18 +119,19 @@ ActiveAdmin.register Contract do
     end
     f.actions 
     actions defaults: true do |f|
-      link_to 'Auth', "/oauth2callback?id=#{resource.id}"
-    end
-    actions defaults: true do |f|
       f.input :number_folder, :class => "input-number"
     end
     
     actions defaults: true do |f|
-      link_to 'Init Folder', "/init_folder?folder=2", { :class=>"init-folder" }
+      link_to '1. Auth', "/oauth2callback?id=#{resource.id}"
+    end
+    
+    actions defaults: true do |f|
+      link_to '2. Init Folder', "/init_folder?id=#{resource.id}&folder=1", { :class=>"init-folder" }
     end
 
     actions defaults: true do |f|
-      link_to 'GET PICTURES', "/get_images?id=#{resource.id}"
+      link_to '3. GET PICTURES', "/get_images?id=#{resource.id}"
     end
   end
 end

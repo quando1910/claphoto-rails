@@ -28,7 +28,9 @@ $(function() {
     })
 
   $('.input-number').keyup(function() {
-    $('.init-folder').attr("href", '/init_folder?folder=' + $('.input-number').val());
+    let query = 'folder=' + $('.input-number').val()
+    let url = $('.init-folder').attr("href").replace(/folder=[0-9]+/, query)
+    $('.init-folder').attr("href", url);
   })
 
 });
