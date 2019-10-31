@@ -133,5 +133,9 @@ ActiveAdmin.register Contract do
     actions defaults: true do |f|
       link_to '3. GET PICTURES', "/get_images?id=#{resource.id}"
     end
+
+    actions defaults: true do |f|
+      link_to '4. UPDATE ALL PICTURES', "/update_images?id=#{resource.id}"
+    end
   end
 end
