@@ -125,6 +125,21 @@ class GoogleController < ApplicationController
     end
   end
 
+  def update_images
+    uri   = URI.parse(request.fullpath)
+    @id = ''
+    if uri.query
+      params = CGI.parse(uri.query)
+      @id  = params['id'].first
+    end
+    if @id 
+      session[:id] = @id
+    end
+    @pictures = Contract.find(session[:id]).viewers.where(typeFile: 1)[0].pictures.destroy_all
+    get_images
+  end
+
+
   def init_folder
     uri   = URI.parse(request.fullpath)
     @id = ''

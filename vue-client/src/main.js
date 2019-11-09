@@ -9,6 +9,7 @@ import directive from './helper/directive'
 import router from './router'
 import VueResource from 'vue-resource'
 import GlobalComponents from './GlobalComponent'
+import {VueMasonryPlugin} from 'vue-masonry'
 import VueI18n from 'vue-i18n'
 import i18n from './locales/config'
 import ElementUI from 'element-ui'
@@ -27,6 +28,7 @@ Vue.use(Vuex)
 Vue.use(router)
 Vue.use(VueResource)
 Vue.use(GlobalComponents)
+Vue.use(VueMasonryPlugin)
 Vue.use(VueProgressiveImage)
 
 Vue.use(VueLazyload, {

@@ -53,6 +53,7 @@ Rails.application.routes.draw do
   post '/public/contracts' => 'contracts#public_create', :as => :public_creation
   get '/init_folder' => 'google#init_folder', :as => :init_folder
   get '/get_images' => 'google#get_images', :as => :get_images
+  get '/update_images' => 'google#update_images', :as => :update_images
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

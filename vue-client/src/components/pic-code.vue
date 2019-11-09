@@ -12,9 +12,9 @@
             <p>Tổng: <b>{{totalPic()}} tấm</b></p>
             <p>Link ảnh gốc </p>
             <div v-if="raws != null">
-            <p v-for="(item, index) of raws.drive_link.split(',')" :key="index"><a target="_blank" :href="item" >{{item}}</a></p>
-            </div>
-            <hr>
+            <p v-for="(item, index) of raws.drive_link.split(',')" :key="`a-${index}`"><a target="_blank" :href="item" >{{item}}</a></p>
+          </div>
+          <hr>
           </div>
           <nav>
             <ul class="pagination">
@@ -23,7 +23,7 @@
                   <span aria-hidden="true">&laquo;</span>
                 </a>
               </li>
-              <li v-for="(item,index) in pages" :key="index">
+              <li v-for="(item,index) in pages" :key="`b-${index}`">
                 <router-link :to="{name: 'PicCode', params: {id: $route.params.id}, query: {page: (index +1)}}" :class="{active: $route.query.page == (index + 1) }" replace>{{index + 1}}</router-link>
               </li>
               <li>
@@ -37,12 +37,14 @@
         <div class="col-md-2 col-sm-2"></div>
         <div class="col-md-10 col-sm-10 view-pic">
           <transition name="fade">
-            <div class="cp-grid-isotope gallery" v-if="pictures && ($route.query.page ? $route.query.page : 1)  == (index + 1)" v-for="(itemPics, index) of pictures" :key="itemPics">
-              <p style="text-align: center">{{itemPics.pictureId.split(',').length}} tấm trong thư mục này</p>
-              <div class="isotope items">
-                <div v-lazy-container="{ selector: 'img' }" class="item" v-for="(item, ind) of itemPics.pictureId.split(',')" :key="ind">
+            <div class="cp-grid-isotope gallery" v-if="pictures && ($route.query.page ? $route.query.page : 1)  == (index + 1)" v-for="(itemPics, index) of pictures" :key="`e-${index}`">
+              <p style="text-align: center">{{itemPics.pictureId.length}} tấm trong thư mục này</p>
+              <div class="isotope items" v-masonry transition-duration="0.3s" item-selector=".item">
+                <div v-masonry-tile class="item" v-for="(item, ind) of itemPics.pictureId" :key="`c-${ind}`">
                   <figure class="cp-hover-eff"> 
-                    <img class="product-photo" alt="img02" :data-src="item | smallGoogleImage" keep-alive/>
+                    <div class="placeholder">
+                      <img class="product-photo" alt="img02" :src="item | mediumGoogleImage" keep-alive @load="continueLoadImage">
+                    </div>
                     <figcaption>
                       <h3>{{itemPics.name.split(',')[ind]}}</h3>
                       <a class="open-image" @click="openImage(item, ind)"><i class="fa fa-search"></i> View Large</a> 
@@ -52,7 +54,7 @@
               </div>
             </div>
           </transition>
-          <div class="cp-pagination">
+          <div id="pagi-bottom" class="cp-pagination">
             <nav>
               <ul class="pagination">
                 <li>
@@ -60,7 +62,7 @@
                     <span aria-hidden="true">&laquo;</span>
                   </a>
                 </li>
-                <li v-for="(item,index) in pages" :key="index">
+                <li v-for="(item,index) in pages" :key="`d-${index}`">
                   <router-link :to="{name: 'PicCode', params: {id: $route.params.id}, query: {page: (index +1)}}" :class="{active: $route.query.page == (index + 1) }" replace>{{index + 1}}</router-link>
                 </li>
                 <li>
@@ -88,9 +90,15 @@ export default {
   data () {
     return {
       pos: null,
+      loadImage: false,
+      numberLoad: 20,
+      imagePerSecond: 5,
+      countPerSecond: 0,
+      sectionPerSecond: [],
       currentPage: null,
-      show: false,
       pictures: null,
+      show: false,
+      pictureTemp: {},
       picArr: null,
       nameArr: null,
       data: [],
@@ -104,64 +112,86 @@ export default {
   },
   created () {
     $('#loadingpos').show()
-    window.addEventListener('load', () => {$('#loadingpos').hide();})
+    window.addEventListener('load', () => {
+      $('#loadingpos').hide()
+      this.loadmorePicture()
+      this.loadImage = false
+      setTimeout(() => {this.loadImage = true},2000)
+    })
     this.$http.get(`${types.SHOW_VIEWER}/${this.$route.params.code}`).then(res => {
       this.contract = res.body.contract
-      this.pictures = res.body.meta.pic
+      this.pictureTemp = res.body.meta.pic.map(params => params.pictureId.split(','))
+      this.pictures = res.body.meta.pic.map(val => {
+        val.pictureId = val.pictureId.split(',').slice(0, this.numberLoad)
+        return val
+      })
       this.raws = res.body.meta.raw
-      console.log(12, res.body)
+      // res.body.meta.pic.map(params => {
+      //   params.pictureId = params.pictureId.split(',').slice(0, this.numberLoad).join()
+      //   return params
+      // })
       this.pages = res.body.meta.count
     })
     // this.$Lazyload.$on('loaded', function (listener) {
     //   console.log(222123123)
     // })
-    this.intervalId = window.setInterval(() => {
-        $(window).trigger("resize")
-        console.log('resize')
-    },15000)
+    // this.intervalId = window.setInterval(() => {
+    //     $(window).trigger("resize")
+    //     console.log('resize')
+    // },15000)
   },
-  mounted () {
-    // if (this.$route.query.pictureId && this.$route.query.pos) {
-    //   this.openImage(this.$route.query.pictureId, this.$route.query.pos)
-    // }
-  },
-  updated() {
+  mounted() {
+    // $(window).scroll(() => {
+    //   if(this.loadImage && $(window).scrollTop() + $(window).height() > $(window).height() + 500 && $(window).scrollTop() + $(window).height() > parseInt($('.cp-grid-isotope').offset().top + $('.cp-grid-isotope').height() )) {
+    //     this.loadmorePicture()
+    //     this.loadImage = false
+    //     setTimeout(() => {this.loadImage = true},2000)
+    //   }
+    // });
     if (this.$route.query.pictureId && this.$route.query.pos) {
       this.openImage(this.$route.query.pictureId, this.$route.query.pos)
     }
-    if ($(".cp-grid-isotope .isotope").length) {
-      var $container = $('.cp-grid-isotope .isotope');
-      $container.isotope({
-        itemSelector: '.item',
-        transitionDuration: '0.6s',
-        masonry: {
-            columnWidth: $container.width() / 12
-        },
-        layoutMode: 'masonry'
-      });
-      $(window).resize(function() {
-        $container.isotope({
-          masonry: {
-            columnWidth: $container.width() / 12
-          }
-        });
-      });
-    }
-    if ($('.gallery').length) {
-      $("area[data-rel^='prettyPhoto']").prettyPhoto()
-      $(".gallery:first a[data-rel^='prettyPhoto']").prettyPhoto({
-        animation_speed:'normal',
-        theme:'light_square',
-        slideshow:3000, 
-        autoplay_slideshow: false
-      });
-    }
-    setTimeout(() => {$(window).trigger("resize")},1500)
   },
   methods: {
+    loadmorePicture() {
+      console.log(123123)
+      let check = false
+      let page = this.$route.query.page ? this.$route.query.page : 1
+      let offset = this.pictures[page - 1].pictureId.length + this.sectionPerSecond.flat().length
+      if (this.sectionPerSecond.length === 0) {
+        check = true
+      }
+      this.sectionPerSecond = [...this.sectionPerSecond, ...this.divideArr(this.pictureTemp[page - 1].slice(offset, offset + this.numberLoad), this.imagePerSecond)]
+      if (check) {
+        console.log('revnew')
+        this.pictures[page - 1].pictureId.push(...this.sectionPerSecond.splice(0, 1)[0])
+      }
+    },
     convertPicId (index) {
       index = index? index -1 : 0
       return this.pictures[index].pictureId.split(',')
+    },
+    continueLoadImage() {
+      this.countPerSecond++
+      let page = this.$route.query.page ? this.$route.query.page : 1
+      console.log(`load ${this.countPerSecond}`)
+      if (this.countPerSecond === this.imagePerSecond) {
+        console.log(`reset`)
+        this.countPerSecond = 0
+        if(this.sectionPerSecond.length > 0) {
+          this.pictures[page - 1].pictureId.push(...this.sectionPerSecond.splice(0, 1)[0])
+        } else {
+          console.log(123123)
+          this.loadmorePicture()
+        }
+      }
+    },
+    divideArr(arr, num) {
+      let temp = [];
+      while (arr.length > 0) {
+        temp.push(arr.splice(0, num));
+      }
+      return temp
     },
     loadMore () {
       this.busy = true;
@@ -174,7 +204,9 @@ export default {
       }, 1000);
     },
     openImage (value, index) {
+      console.log(888)
       // this.show = true
+      $('body').addClass('lock-scroll')
       var page = this.$route.query.page ? this.$route.query.page : 1
       window.history.pushState(null, '', `?page=${page}&pictureId=${value}&pos=${index}`)
       $('#pictureBox').show()
@@ -182,33 +214,45 @@ export default {
       $('.pic-view').attr('pos', index)
       $('.pic-view').attr('page', page)
       $('.pic-download').attr('href', this.$options.filters.fullGoogleImage(value))
+      // $('.pic-facebook').attr('href', this.$options.filters.facebookImage(value))
       // this.pos = index
       // this.currentPage = this.$route.query.page ? this.$route.query.page : 1
-      // this.picView = value
+      this.picView = value
     },
     convertPicName (index) {
       index = index? index -1 : 0
       return this.pictures[index].name.split(',')
     },
     getCloseBox (value) {
+      console.log(1234)
       window.history.pushState(null, '', `?page=${this.$route.query.page ? this.$route.query.page : 1}`)
+      $('.pic-view').attr('src', null)
+      this.picView = null
       $('#pictureBox').hide()
+      $('body').removeClass('lock-scroll')
     },
     getNextImg (value) {
-      let page = +$('.pic-view').attr('page') - 1
-      let range = this.pictures[page].pictureId.split(',').length
+      let page = +$('.pic-view').attr('page')
+      let range = this.pictureTemp[page - 1].length
+      let currentRange = this.pictures[page - 1].pictureId.length
       let pos = +$('.pic-view').attr('pos') === (range - 1) ? 0 : (+$('.pic-view').attr('pos') + 1)
+      if(range - currentRange > this.numberLoad && pos > currentRange - 5 ) {
+        console.log('loadload')
+        this.loadmorePicture()
+        currentRange = this.pictures[page - 1].pictureId.length
+      }
+      console.log(range - currentRange, pos, currentRange)
       this.setImage(pos, page)
     },
     getPrevImg (value) {
-      let page = +$('.pic-view').attr('page') - 1
-      let range = this.pictures[page].pictureId.split(',').length
+      let page = +$('.pic-view').attr('page')
+      let range = this.pictureTemp[page - 1].length
       let pos = +$('.pic-view').attr('pos') === 0 ? (range - 1) : (+$('.pic-view').attr('pos') - 1)
       this.setImage(pos, page)
     },
     setImage (pos, page) {
-      var picView = this.pictures[page].pictureId.split(',')[pos]
-      window.history.replaceState(null, '', `?page=${page + 1}&pictureId=${picView}&pos=${pos}`)
+      var picView = this.pictureTemp[page - 1][pos]
+      window.history.replaceState(null, '', `?page=${page}&pictureId=${picView}&pos=${pos}`)
       $('.pic-view').attr('pos', pos)
       $('.pic-view').attr('page', this.$route.query.page ? this.$route.query.page : 1)
       $('.pic-view').attr('src', this.$options.filters.mediumGoogleImage(picView))
@@ -216,9 +260,11 @@ export default {
         $('#loadingpos').hide();
       });
      $('.pic-download').attr('href', this.$options.filters.fullGoogleImage(picView))
+     this.picView = picView
+    //  $('.pic-facebook').attr('href', this.$options.filters.facebookImage(picView))
     },
     totalPic() {
-      return this.pictures.map(x=> x.pictureId.split(',').length).reduce((acc,curr) => {
+      return this.pictureTemp.map(x => x.length).reduce((acc,curr) => {
         return acc + curr
       }, 0)
     }
@@ -247,5 +293,20 @@ export default {
 
 #pictureBox {
   display: none;
+}
+.lock-scroll {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+}
+.placeholder {
+  width: 100%;
+  min-height: 200px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url('../assets/images/placeholder.png');
+}
+.item {
+  padding: 1px;
 }
 </style>
