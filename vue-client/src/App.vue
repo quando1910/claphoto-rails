@@ -2,7 +2,7 @@
   <div :class="navbarToggle === 0 ? 'app' : 'inner-page'">
     <div id="wrapper"> 
       <navbar v-if="navbarToggle !== 2" :navVar="navbarToggle"/>
-      <router-view :key="$route.fullPath"/>
+      <router-view :key="$route.path"/>
       <app-footer v-if="navbarToggle !== 2"/>
     </div>
     <div class="options-cart">

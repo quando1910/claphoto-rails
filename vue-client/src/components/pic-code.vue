@@ -36,8 +36,8 @@
         </div>
         <div class="col-md-2 col-sm-2"></div>
         <div class="col-md-10 col-sm-10 view-pic">
-          <transition name="fade">
-            <div class="cp-grid-isotope gallery" v-if="pictures && ($route.query.page ? $route.query.page : 1)  == (index + 1)" v-for="(itemPics, index) of pictures" :key="`e-${index}`">
+          <transition-group name="fade">
+            <div class="cp-grid-isotope gallery" v-show="pictures && ($route.query.page ? $route.query.page : 1)  == (index + 1)" v-for="(itemPics, index) of pictures" :key="`e-${index}`">
               <p style="text-align: center">{{itemPics.pictureId.length}} tấm trong thư mục này</p>
               <div class="isotope items" v-masonry transition-duration="0.3s" item-selector=".item">
                 <div v-masonry-tile class="item" v-for="(item, ind) of itemPics.pictureId" :key="`c-${ind}`">
@@ -53,7 +53,7 @@
                 </div>
               </div>
             </div>
-          </transition>
+          </transition-group>
           <div id="pagi-bottom" class="cp-pagination">
             <nav>
               <ul class="pagination">
@@ -224,7 +224,6 @@ export default {
       return this.pictures[index].name.split(',')
     },
     getCloseBox (value) {
-      console.log(1234)
       window.history.pushState(null, '', `?page=${this.$route.query.page ? this.$route.query.page : 1}`)
       $('.pic-view').attr('src', null)
       this.picView = null
@@ -241,7 +240,6 @@ export default {
         this.loadmorePicture()
         currentRange = this.pictures[page - 1].pictureId.length
       }
-      console.log(range - currentRange, pos, currentRange)
       this.setImage(pos, page)
     },
     getPrevImg (value) {
