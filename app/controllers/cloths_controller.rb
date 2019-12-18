@@ -10,7 +10,7 @@ class ClothsController < ApplicationController
   end
 
   def related_clothes
-    @cloth = Cloth.where.not(id: params[:id]).limit(5).includes(:images)
+    @cloth = Cloth.where.not(id: params[:id]).where(parent_id: nil).limit(5).includes(:images)
     render json: @cloth, include: [:images]
   end
 end
